@@ -23,6 +23,40 @@ const Reply = require('../models/reply');
         });
     });
 
+    router.get('/id/:id', (req, res) => {
+        Message.findById(req.params.id).populate('replies').exec()
+        .then(msg => {
+            res.json({ message: msg });
+        })
+        .catch(error => { 
+            console.log('error', error);
+            res.json({ message: "Error ocurred, please try again" });
+        });
+    });
+
+    router.get('/journey/:id', (req, res) => {
+        Message.findOne({journeyId: req.body._id}).populate('replies').exec()
+        .then(msg => {
+            res.json({ message: msg });
+        })
+        .catch(error => { 
+            console.log('error', error);
+            res.json({ message: "Error ocurred, please try again" });
+        });
+    });
+
+
+    router.get('/user/:id', (req, res) => {
+        Message.findOne({userId: req.body._id}).populate('replies').exec()
+        .then(msg => {
+            res.json({ message: msg });
+        })
+        .catch(error => { 
+            console.log('error', error);
+            res.json({ message: "Error ocurred, please try again" });
+        });
+    });
+
 
 
 
