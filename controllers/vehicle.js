@@ -15,14 +15,14 @@ router.get('/test', (req, res) => {
     res.json({ message: 'Vehicle endpoint OK! ✅' });
 });
 
-router.post('/addvehicle', passport.authenticate('jwt', { session: false }), (req, res) => {
-    console.log('===> Inside of /addVehicle');
+router.post('/new', passport.authenticate('jwt', { session: false }), (req, res) => {
+    console.log('===> Inside of /vehicle');
     //console.log('===> /register -> req.body',req.body);
-    const newVehicle = new Vehicle({
+    Vehicle.create({
         make: req.body.make,
         model: req.body.model,
         year: req.body.year,
-        availableSeats: req.body.availableSeats
+        seats: req.body.seats
     });
     newVehicle.save()
     .then(createdVehicle => res.json({ vehicle: createdVehicle}))
