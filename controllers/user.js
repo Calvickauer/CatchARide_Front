@@ -32,8 +32,7 @@ router.post('/signup', (req, res) => {
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
                 email: req.body.email,
-                dateOfBirth: req.body.dateOfBirth,
-                vehicle: false,
+                birthdate: req.body.birthdate,
                 password: req.body.password
             });
 
@@ -80,7 +79,7 @@ router.post('/login', async (req, res) => {
             const payload = {
                 id: foundUser.id,
                 email: foundUser.email,
-                name: foundUser.name
+                name: foundUser.firstName
             }
 
             jwt.sign(payload, JWT_SECRET, { expiresIn: 3600 }, (err, token) => {

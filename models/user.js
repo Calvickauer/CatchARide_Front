@@ -27,8 +27,8 @@ const userSchema = new Schema({
     driver: {
         type: Boolean
     },
-    dateOfBirth: {
-        type: Date,
+    birthdate: {
+        type: String,
         required: true
     },
     vehicle: [{
