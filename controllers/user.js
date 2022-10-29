@@ -80,6 +80,7 @@ router.post('/login', async (req, res) => {
                 id: foundUser.id,
                 firstName: foundUser.firstName,
                 lastName: foundUser.lastName,
+                birthdate: foundUser.birthdate,
                 email: foundUser.email
             }
 
