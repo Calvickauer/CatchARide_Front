@@ -14,7 +14,7 @@ const vehicleSchema = new Schema({
         type: Number,
         required: true
     },
-    availableSeats: {
+    seats: {
         type: Number,
         required: true
     }
