@@ -23,14 +23,27 @@ router.post('/new', passport.authenticate('jwt', { session: false }), (req, res)
         model: req.body.model,
         year: req.body.year,
         seats: req.body.seats
-    });
-    newVehicle.save()
-    .then(createdVehicle => res.json({ vehicle: createdVehicle}))
-        .catch(err => {
-            console.log('error with creating new user', err);
-            res.json({ message: 'Error occured... Please try again.'});
-    });
+    })
+    .then(newVehicle => {
+        console.log('New vehicle created', newVehicle);
+        res.redirect(`/vehicles/${newVehicle.id}`);
+    })
+    .catch(err => {
+        console.log('Error in example#create:', err);
+        res.json({ message: 'Error occured... Please try again.'});
+    })
     
+});
+
+router.get('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+    Vehicle.findById(req.params.id)
+    .then(vehicle => {
+        console.log(vehicle);
+        res.json({vehicle: vehicle});
+    })
+    .catch(error => {
+        console.log(error)
+    });
 });
 
 

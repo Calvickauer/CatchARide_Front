@@ -36,9 +36,7 @@ app.get('/', (req, res) => {
 
 app.use('/examples', require('./controllers/example'));
 app.use('/users', require('./controllers/user'));
-
 app.use('/vehicles', require('./controllers/vehicle'));
-
 app.use('/journeys', require('./controllers/journey'));
 
 
