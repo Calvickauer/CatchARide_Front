@@ -21,12 +21,15 @@ router.post('/new', passport.authenticate('jwt', { session: false }), async (req
         .then(reply => {
             msg.replies.push(reply);
             msg.save()
-            res.redirect(`/messages`);
+            res.redirect(`/`);
         })
         .catch(err => {
             console.log(err);
         })
      })
 })
+
+
+
 
 module.exports = router;
