@@ -3,13 +3,23 @@ const { Schema } = mongoose;
 
 const messageSchema = new Schema({
     title: {
-        type: String,
-        required: true
+        title: String
+    },
+    journeyId: {
+        journeyId: String,
+    },
+    userId: {
+        userId: String,
     },
     content: {
         type: String,
         required: true
     },
+
+        replies: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Reply'
+    }]
    
 })
 
