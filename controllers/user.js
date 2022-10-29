@@ -78,8 +78,9 @@ router.post('/login', async (req, res) => {
             // save the user
             const payload = {
                 id: foundUser.id,
-                email: foundUser.email,
-                name: foundUser.firstName
+                firstName: foundUser.firstName,
+                lastName: foundUser.lastName,
+                email: foundUser.email
             }
 
             jwt.sign(payload, JWT_SECRET, { expiresIn: 3600 }, (err, token) => {
@@ -105,8 +106,8 @@ router.get('/profile', passport.authenticate('jwt', { session: false }), (req, r
     console.log(req.body);
     console.log('====> user')
     console.log(req.user);
-    const { id, name, email } = req.user; // object with user object inside
-    res.json({ id, name, email });
+    const { id, firstName, lastName, email } = req.user; // object with user object inside
+    res.json({ id, firstName, lastName, email });
 });
 
 router.get('/messages', passport.authenticate('jwt', { session: false }), async (req, res) => {
