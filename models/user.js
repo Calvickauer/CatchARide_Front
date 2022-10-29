@@ -25,7 +25,8 @@ const userSchema = new Schema({
         default: Date.now()
     },
     driver: {
-        type: Boolean
+        type: Boolean,
+        default: false
     },
     birthdate: {
         type: String,

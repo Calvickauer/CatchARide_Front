@@ -13,6 +13,16 @@ const journeySchema = new Schema({
     contribution: {
         type: Number,
         required: true
+    },
+    openSeats: {
+        type: Number,
+        required: true
+    },
+    driverUid: {
+        type: String
+    },
+    passengerUids: {
+        type: Array
     }
 })
 
