@@ -12,7 +12,7 @@ const Message = require('../models/message');
 const Reply = require('../models/reply');
 
 router.get('/new', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    res.json({"messages"});
+    res.json({messages: "messages"});
 })
 
 
