@@ -28,7 +28,7 @@ const userSchema = new Schema({
         type: Boolean,
         default: false
     },
-    dateOfBirth: {
+    birthdate: {
         type: Date,
         required: true
     },

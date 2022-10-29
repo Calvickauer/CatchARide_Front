@@ -32,8 +32,7 @@ router.post('/signup', (req, res) => {
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
                 email: req.body.email,
-                dateOfBirth: req.body.dateOfBirth,
-                vehicle: [],
+                birthdate: req.body.birthdate,
                 password: req.body.password
             });
 
