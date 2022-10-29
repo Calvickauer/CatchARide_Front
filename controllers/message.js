@@ -65,7 +65,7 @@ router.post('/new', passport.authenticate('jwt', { session: false }), async (req
         title: req.body.title,
         content: req.body.content,
         journeyId: req.body.email,
-        userId: req.body.dateOfBirth
+        userId: req.body.birthdate
     });
     newMsg.save().then(createdMsg => {
         
