@@ -38,6 +38,8 @@ app.use('/examples', require('./controllers/example'));
 app.use('/users', require('./controllers/user'));
 app.use('/vehicles', require('./controllers/vehicle'));
 app.use('/journeys', require('./controllers/journey'));
+app.use('/messages', require('./controllers/message'));
+app.use('/reply', require('./controllers/reply'));
 
 
 // Server
