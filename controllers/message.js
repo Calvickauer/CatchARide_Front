@@ -11,9 +11,18 @@ const { JWT_SECRET } = process.env;
 const Message = require('../models/message');
 const Reply = require('../models/reply');
 
-router.get('/new', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    res.json({messages: "messages"});
-})
+
+    router.get('/', (req, res) => {
+        Message.find({}).populate('replies').exec()
+        .then(msg => {
+            res.json({ message: msg });
+        })
+        .catch(error => { 
+            console.log('error', error);
+            res.json({ message: "Error ocurred, please try again" });
+        });
+    });
+
 
 
 
