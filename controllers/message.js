@@ -63,9 +63,7 @@ const Reply = require('../models/reply');
 router.post('/new', passport.authenticate('jwt', { session: false }), async (req, res) => {
     const newMsg = new Message({
         title: req.body.title,
-        content: req.body.content,
-        journeyId: req.body.email,
-        userId: req.body.dateOfBirth
+        content: req.body.content
     });
     newMsg.save().then(createdMsg => {
         

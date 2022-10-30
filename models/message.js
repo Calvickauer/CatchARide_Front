@@ -19,6 +19,10 @@ const messageSchema = new Schema({
         replies: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Reply'
+    }],
+    user: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     }]
    
 })

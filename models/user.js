@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const Vehicle = require('./vehicle');
+const Message = require('./message');
+const Reply = require('../models/reply');
 
 const userSchema = new Schema({
     firstName: {
@@ -31,6 +33,14 @@ const userSchema = new Schema({
     vehicle: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Vehicle'
+    }],
+    messages: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Message'
+    }],
+    replies: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Reply'
     }]
 })
 
