@@ -36,30 +36,6 @@ const User = require('../models/user');
         });
     });
 
-    router.get('/journey/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
-        Message.findOne({journeyId: req.params.id}).populate('replies').exec()
-        .then(msg => {
-            res.json({ message: msg });
-        })
-        .catch(error => { 
-            console.log('error', error);
-            res.json({ message: "Error ocurred, please try again" });
-        });
-    });
-
-
-    router.get('/user/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
-        Message.findOne({userId: req.params.id}).populate('replies').exec()
-        .then(msg => {
-            res.json({ message: msg });
-        })
-        .catch(error => { 
-            console.log('error', error);
-            res.json({ message: "Error ocurred, please try again" });
-        });
-    });
-
-
 
 
 router.post('/new', passport.authenticate('jwt', { session: false }), async (req, res) => {
@@ -71,8 +47,10 @@ router.post('/new', passport.authenticate('jwt', { session: false }), async (req
             title: req.body.title,
             content: req.body.content
     }).then(message => {
+        message.user.push(user);
         user.messages.push(message);
         res.redirect(`/messages`);
+        message.save();
         user.save();
     })
 
