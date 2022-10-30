@@ -7,9 +7,11 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const { JWT_SECRET } = process.env;
 
+
 // DB Models
 const Message = require('../models/message');
 const Reply = require('../models/reply');
+const User = require('../models/user');
 
 
     router.get('/', (req, res) => {
@@ -61,19 +63,22 @@ const Reply = require('../models/reply');
 
 
 router.post('/new', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const newMsg = new Message({
-        title: req.body.title,
-        content: req.body.content
-    });
-    newMsg.save().then(createdMsg => {
-        
-        res.json({ message: createdMsg});
+    console.log('body', req.body);
+    console.log('user', req.user);
+    User.findById(req.user._id)
+    .then(user => {
+        Message.create({
+            title: req.body.title,
+            content: req.body.content
+    }).then(message => {
+        user.messages.push(message);
+        res.redirect(`/messages`);
+        user.save();
+    })
+
     }).catch(err => {
         console.log(err);
-    });
-    res.redirect(`/`);
-
-    
+    }); 
 });
 
 
