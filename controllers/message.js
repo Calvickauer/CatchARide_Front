@@ -39,6 +39,7 @@ const User = require('../models/user');
 
 
 router.post('/new', passport.authenticate('jwt', { session: false }), async (req, res) => {
+
     console.log('body', req.body);
     console.log('user', req.user);
     User.findById(req.user._id)
@@ -53,6 +54,17 @@ router.post('/new', passport.authenticate('jwt', { session: false }), async (req
         message.save();
         user.save();
     })
+
+
+    const newMsg = new Message({
+        title: req.body.title,
+        content: req.body.content,
+        journeyId: req.body.email,
+        userId: req.body.birthdate
+    });
+    newMsg.save().then(createdMsg => {
+        
+        res.json({ message: createdMsg});
 
     }).catch(err => {
         console.log(err);
