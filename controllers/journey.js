@@ -48,10 +48,20 @@ router.post('/new', passport.authenticate('jwt', { session: false }), (req, res)
     })
 });
 
-// POST route add passengers to journey
-router.post('/passengers/add', passport.authenticate('jwt', { session: false }), (req, res) => {
+// // POST route add passengers to journey
+// router.post('/:id/passengers/add', passport.authenticate('jwt', { session: false }), (req, res) => {
+//     Journey.findById(req.params.id)
+//      .then(journey => {
+//         console.log(journey);
+//         journey.passengerUids.push(___); // unsure how to reference passender UID from message
+//         journey.save();
+//         res.redirect(`/journeys/${journey.id}`);
+//         })
+//         .catch(err => {
+//             console.log(err);
+//         });
+// });
 
-});
 
 // GET route display one journey
 router.get('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
