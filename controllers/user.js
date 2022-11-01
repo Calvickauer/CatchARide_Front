@@ -78,8 +78,10 @@ router.post('/login', async (req, res) => {
             // save the user
             const payload = {
                 id: foundUser.id,
-                email: foundUser.email,
-                name: foundUser.name
+                firstName: foundUser.firstName,
+                lastName: foundUser.lastName,
+                birthdate: foundUser.birthdate,
+                email: foundUser.email
             }
 
             jwt.sign(payload, JWT_SECRET, { expiresIn: 3600 }, (err, token) => {
@@ -105,20 +107,20 @@ router.get('/profile', passport.authenticate('jwt', { session: false }), (req, r
     console.log(req.body);
     console.log('====> user')
     console.log(req.user);
-    const { id, name, email } = req.user; // object with user object inside
-    res.json({ id, name, email });
+    const { id, firstName, lastName, email } = req.user; // object with user object inside
+    res.json({ id, firstName, lastName, email });
 });
 
-router.get('/messages', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    console.log('====> inside /messages');
-    console.log(req.body);
-    console.log('====> user')
-    console.log(req.user);
-    const { id, name, email } = req.user; // object with user object inside
-    const messageArray = ['message 1', 'message 2', 'message 3', 'message 4', 'message 5', 'message 6', 'message 7', 'message 8', 'message 9'];
-    const sameUser = await User.findById(id);
-    res.json({ id, name, email, message: messageArray, sameUser });
-});
+// router.get('/messages', passport.authenticate('jwt', { session: false }), async (req, res) => {
+//     console.log('====> inside /messages');
+//     console.log(req.body);
+//     console.log('====> user')
+//     console.log(req.user);
+//     const { id, name, email } = req.user; // object with user object inside
+//     const messageArray = ['message 1', 'message 2', 'message 3', 'message 4', 'message 5', 'message 6', 'message 7', 'message 8', 'message 9'];
+//     const sameUser = await User.findById(id);
+//     res.json({ id, name, email, message: messageArray, sameUser });
+// });
 
-// Exports
+//Exports
 module.exports = router;

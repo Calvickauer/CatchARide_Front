@@ -1,5 +1,5 @@
 // Imports
-require('dotenv').config()
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const passport = require('passport');
@@ -36,7 +36,11 @@ app.get('/', (req, res) => {
 
 app.use('/examples', require('./controllers/example'));
 app.use('/users', require('./controllers/user'));
+app.use('/vehicles', require('./controllers/vehicle'));
 app.use('/journeys', require('./controllers/journey'));
+app.use('/messages', require('./controllers/message'));
+app.use('/reply', require('./controllers/reply'));
+
 
 // Server
 const server = app.listen(PORT, () => console.log(`Server is running on PORT: ${PORT}`));
