@@ -40,7 +40,7 @@ router.post('/new', passport.authenticate('jwt', { session: false }), (req, res)
     })
     .then(newJourney => {
         console.log('New journey created', newJourney);
-        res.redirect(`/journeys/${newJourney.id}`);
+        res.send(newJourney._id);
     })
     .catch(err => {
         console.log('Error in example#create:', err);
@@ -55,6 +55,7 @@ router.post('/passengers/add', passport.authenticate('jwt', { session: false }),
 
 // GET route display one journey
 router.get('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+    console.log('testing GET id route');
     Journey.findById(req.params.id)
     .then(journey => {
         console.log(journey);
