@@ -6,10 +6,12 @@ const messageSchema = new Schema({
         title: String
     },
     journeyId: {
-        journeyId: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Journey'
     },
     userId: {
-        userId: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     },
     content: {
         type: String,

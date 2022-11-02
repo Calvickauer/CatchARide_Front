@@ -11,6 +11,7 @@ const { JWT_SECRET } = process.env;
 // DB Models
 const Message = require('../models/message');
 const Reply = require('../models/reply');
+const Journey = require('../models/journey');
 const User = require('../models/user');
 
 
@@ -86,6 +87,25 @@ router.put('/edit/:id', (req, res) => {
     })
 });
 
+// POST route add passengers to journey
+router.post('/:id/passengers/add', passport.authenticate('jwt', { session: false }), (req, res) => {
+    Message.findById(req.params.id)
+     .then(msg => {
+        console.log(msg.journeyId);
+        Journey.findById(msg.journeyId)
+        .then(journey => {
+            journey.passengerUids.push(msg.userId); 
+            journey.save();
+            res.redirect(`/journeys/${journey.id}`);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        })
+        .catch(err => {
+            console.log(err);
+        });
+});
 
 
 module.exports = router;
