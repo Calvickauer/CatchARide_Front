@@ -5,13 +5,12 @@ const messageSchema = new Schema({
     title: {
         title: String
     },
-    
+
     content: {
         type: String,
         required: true
     },
-
-        replies: [{
+    replies: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Reply'
     }],

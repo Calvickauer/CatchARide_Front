@@ -66,6 +66,7 @@ router.post('/login', async (req, res) => {
     console.log('===> /login -> req.body', req.body);
 
     const foundUser = await User.findOne({ email: req.body.email });
+    console.log('===>user', foundUser);
 
     if (foundUser) {
         // user is in the DB
@@ -103,12 +104,19 @@ router.post('/login', async (req, res) => {
 
 // private
 router.get('/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
+   User.findById(req.user._id).populate('messages').populate('journey').populate('vehicle').exec()
+   .then(user => {
+    console.log('ERROR', err);
     console.log('====> inside /profile');
     console.log(req.body);
     console.log('====> user')
     console.log(req.user);
     const { id, firstName, lastName, email } = req.user; // object with user object inside
-    res.json({ id, firstName, lastName, email });
+    res.json({ id, firstName, lastName, email }, {user: user} );
+   }).catch(err => {
+    console.log('ERROR', err);
+   })
+   
 });
 
 // router.get('/messages', passport.authenticate('jwt', { session: false }), async (req, res) => {
