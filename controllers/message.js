@@ -74,7 +74,6 @@ router.post('/new', passport.authenticate('jwt', { session: false }), async (req
         console.log(err);
     });
     res.redirect(`/`);
-
     
 });
 
