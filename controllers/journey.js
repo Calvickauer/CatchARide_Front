@@ -35,7 +35,7 @@ router.post('/new', passport.authenticate('jwt', { session: false }), (req, res)
         destination: req.body.destination,
         contribution: req.body.contribution,
         openSeats: req.body.openSeats,
-        driverUid: req.user.id,
+        driverUid: req.user._id,
         passengerUids: []
     })
     .then(newJourney => {
