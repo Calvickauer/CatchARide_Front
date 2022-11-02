@@ -17,8 +17,6 @@ router.get('/test', (req, res) => {
 });
 
 router.post('/new', passport.authenticate('jwt', { session: false }), (req, res) => {
-    //console.log('===> Inside of /vehicle');
-    //console.log('===> /register -> req.body',req.body);
     User.findById(req.body.id)
     .then(theUser => {
         console.log(theUser);
@@ -31,7 +29,7 @@ router.post('/new', passport.authenticate('jwt', { session: false }), (req, res)
         .then(theVehicle => {
             theUser.vehicle.push(theVehicle);
             theUser.save();
-            res.redirect(`/vehicles/${theVehicle.id}`);
+            res.redirect(`/vehicles/vehicle/${theVehicle.id}`);
         })  
     })
     .catch(err => {
@@ -40,8 +38,8 @@ router.post('/new', passport.authenticate('jwt', { session: false }), (req, res)
     
 });
 
-router.get('/vehicle', (req, res) => {
-    Vehicle.findById(req.body.id)
+router.get('/vehicle/:id', (req, res) => {
+    Vehicle.findById(req.params.id)
     .then(vehicle => {
         console.log(vehicle);
         res.json({vehicle: vehicle});
@@ -53,7 +51,7 @@ router.get('/vehicle', (req, res) => {
 
 
 
-router.put('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.put('/update/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
     Vehicle.findById(req.params.id)
         .then(vehicle => {
             console.log('journey found', vehicle);
@@ -66,7 +64,7 @@ router.put('/:id', passport.authenticate('jwt', { session: false }), (req, res) 
                 })
                 .then(vehicle => {
                     console.log('vehicle was updated', vehicle);
-                    res.redirect(`/vehicles/${req.params.id}`)
+                    res.redirect(`/vehicles/vehicle/${req.params.id}`)
                 })
                 .catch(error => {
                     console.log('error', error)
@@ -79,6 +77,22 @@ router.put('/:id', passport.authenticate('jwt', { session: false }), (req, res) 
         })
 });
 
+router.delete('/delete/:id', (req, res) => {
+    // Purpose: Update one example in the DB, and return
+    console.log('=====> Inside DELETE /vehicles/:id');
+    console.log('=====> req.params');
+    console.log(req.params); // object used for finding example by id
+    
+    Vehicle.findByIdAndRemove(req.params.id)
+    .then(response => {
+        console.log(`Vehicle ${req.params.id} was deleted`, response);
+        res.redirect(`/vehicles/test`);
+    })
+    .catch(err => {
+        console.log('Error in vehicle delete:', err);
+        res.json({ message: 'Error occured... Please try again.'});
+    });
+});
 
 
 module.exports = router;
