@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const User = require('./user');
 
 const journeySchema = new Schema({
     origin: {
@@ -18,10 +19,10 @@ const journeySchema = new Schema({
         type: Number,
         required: true
     },
-    driverUid: {
+    driverUid: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    },
+    }],
     passengerUids: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

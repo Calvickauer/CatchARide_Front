@@ -15,7 +15,13 @@ const Journey = require('../models/journey');
 const User = require('../models/user');
 
 
-    router.get('/', (req, res) => {
+router.get('/', (req, res) => {
+    res.json({ message: 'Messages endpoint OK! ✅' });
+});
+
+// show all messages from all users, for test only
+
+    router.get('/test', (req, res) => {
         Message.find({}).populate('replies').exec()
         .then(msg => {
             res.json({ message: msg });
@@ -26,8 +32,21 @@ const User = require('../models/user');
         });
     });
 
-    router.get('/id/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
-        Message.findById(req.params.id).populate('replies').exec()
+
+
+// return route from delete ===> for now
+
+    router.get('/return', (req, res) => {
+        res.json({deleted: 'Deleted'});
+    });
+
+
+
+
+    // get 1 message by it's Id coming as params
+
+    router.get('/show/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
+        Message.findById(req.params.id).populate('replies').populate('user').populate('journey').exec()
         .then(msg => {
             res.json({ message: msg });
         })
@@ -38,6 +57,7 @@ const User = require('../models/user');
     });
 
 
+// create a new message
 
 router.post('/new', passport.authenticate('jwt', { session: false }), async (req, res) => {
     console.log('body', req.body);
@@ -50,7 +70,7 @@ router.post('/new', passport.authenticate('jwt', { session: false }), async (req
     }).then(message => {
         message.user.push(user);
         user.messages.push(message);
-        res.redirect(`/messages/id/${message.id}`);
+        res.redirect(`/messages/show/${message.id}`);
         message.save();
         user.save();
     })
@@ -60,6 +80,7 @@ router.post('/new', passport.authenticate('jwt', { session: false }), async (req
     }); 
 });
 
+//edit one message find by id
 
 router.put('/edit/:id', (req, res) => {
     console.log('route is being on PUT')
@@ -87,25 +108,37 @@ router.put('/edit/:id', (req, res) => {
     })
 });
 
-// POST route add passengers to journey
-router.post('/:id/passengers/add', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Message.findById(req.params.id)
-     .then(msg => {
-        console.log(msg.journeyId);
-        Journey.findById(msg.journeyId)
-        .then(journey => {
-            journey.passengerUids.push(msg.userId); 
-            journey.save();
-            res.redirect(`/journeys/${journey.id}`);
-            })
-            .catch(err => {
-                console.log(err);
-            });
-        })
-        .catch(err => {
-            console.log(err);
-        });
+router.delete('/delete/:id', (req, res) => {
+    Message.findByIdAndRemove(req.params.id)
+    .then(response => {
+        res.redirect(`/return`);
+    })
+    .catch(err => {
+        console.log('Error in vehicle delete:', err);
+        res.json({ message: 'Error occured... Please try again.'});
+    });
 });
+
+
+// POST route add passengers to journey // will comeback to this.
+// router.post('/:id/passengers/add', passport.authenticate('jwt', { session: false }), (req, res) => {
+//     Message.findById(req.params.id)
+//      .then(msg => {
+//         console.log(msg.journeyId);
+//         Journey.findById(msg.journeyId)
+//         .then(journey => {
+//             journey.passengerUids.push(msg.userId); 
+//             journey.save();
+//             res.redirect(`/journeys/${journey.id}`);
+//             })
+//             .catch(err => {
+//                 console.log(err);
+//             });
+//         })
+//         .catch(err => {
+//             console.log(err);
+//         });
+// });
 
 
 module.exports = router;
