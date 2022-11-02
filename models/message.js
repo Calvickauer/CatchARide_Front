@@ -6,10 +6,12 @@ const messageSchema = new Schema({
         title: String
     },
     journeyId: {
-        journeyId: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Journey'
     },
     userId: {
-        userId: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     },
     content: {
         type: String,
@@ -19,6 +21,10 @@ const messageSchema = new Schema({
         replies: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Reply'
+    }],
+    user: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     }]
    
 })

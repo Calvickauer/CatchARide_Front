@@ -19,11 +19,13 @@ const journeySchema = new Schema({
         required: true
     },
     driverUid: {
-        type: String
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     },
-    passengerUids: {
-        type: Array
-    }
+    passengerUids: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }]
 })
 
 const Journey = mongoose.model('Journey', journeySchema);

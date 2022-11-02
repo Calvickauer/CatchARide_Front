@@ -40,7 +40,8 @@ router.post('/new', passport.authenticate('jwt', { session: false }), (req, res)
     })
     .then(newJourney => {
         console.log('New journey created', newJourney);
-        res.redirect(`/journeys/${newJourney.id}`);
+        // res.send(newJourney._id);
+        res.redirect(`/journeys/${newJourney._id}`)
     })
     .catch(err => {
         console.log('Error in example#create:', err);
@@ -48,13 +49,37 @@ router.post('/new', passport.authenticate('jwt', { session: false }), (req, res)
     })
 });
 
-// POST route add passengers to journey
-router.post('/passengers/add', passport.authenticate('jwt', { session: false }), (req, res) => {
+// // POST route add passengers to journey
+// router.post('/:id/passengers/add', passport.authenticate('jwt', { session: false }), (req, res) => {
+//     Journey.findById(req.params.id)
+//      .then(journey => {
+//         console.log(journey);
+//         journey.passengerUids.push(___); // unsure how to reference passender UID from message
+//         journey.save();
+//         res.redirect(`/journeys/${journey.id}`);
+//         })
+//         .catch(err => {
+//             console.log(err);
+//         });
+// });
 
-});
 
 // GET route display one journey
 router.get('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+    console.log('testing GET id route');
+    Journey.findById(req.params.id)
+    .then(journey => {
+        console.log(journey);
+        res.json({journey: journey});
+    })
+    .catch(error => {
+        console.log(error)
+    });
+});
+
+// GET route edit one journey
+router.get('/edit/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+    console.log('testing GET id route');
     Journey.findById(req.params.id)
     .then(journey => {
         console.log(journey);
@@ -66,7 +91,7 @@ router.get('/:id', passport.authenticate('jwt', { session: false }), (req, res) 
 });
 
 // PUT route edit one journey
-router.put('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.put('/edit/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
     Journey.findById(req.params.id)
         .then(foundJourney => {
             console.log('journey found', foundJourney);
