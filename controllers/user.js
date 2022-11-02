@@ -106,29 +106,19 @@ router.post('/login', async (req, res) => {
 router.get('/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
    User.findById(req.user._id).populate('messages').populate('journey').populate('vehicle').exec()
    .then(user => {
-    console.log('ERROR', err);
     console.log('====> inside /profile');
     console.log(req.body);
     console.log('====> user')
     console.log(req.user);
-    const { id, firstName, lastName, email } = req.user; // object with user object inside
-    res.json({ id, firstName, lastName, email }, {user: user} );
+    const { id, firstName, lastName, email, messages, journey, vehicle } = user; // object with user object inside
+    res.json({ id, firstName, lastName, email, messages, journey, vehicle });
    }).catch(err => {
-    console.log('ERROR', err);
+    console.log('ERROR')
    })
    
 });
 
-// router.get('/messages', passport.authenticate('jwt', { session: false }), async (req, res) => {
-//     console.log('====> inside /messages');
-//     console.log(req.body);
-//     console.log('====> user')
-//     console.log(req.user);
-//     const { id, name, email } = req.user; // object with user object inside
-//     const messageArray = ['message 1', 'message 2', 'message 3', 'message 4', 'message 5', 'message 6', 'message 7', 'message 8', 'message 9'];
-//     const sameUser = await User.findById(id);
-//     res.json({ id, name, email, message: messageArray, sameUser });
-// });
+
 
 //Exports
 module.exports = router;

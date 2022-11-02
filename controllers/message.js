@@ -70,7 +70,7 @@ router.post('/new', passport.authenticate('jwt', { session: false }), async (req
     }).then(message => {
         message.user.push(user);
         user.messages.push(message);
-        res.redirect(`/messages/id/${message.id}`);
+        res.redirect(`/messages/show/${message.id}`);
         message.save();
         user.save();
     })

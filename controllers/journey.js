@@ -63,11 +63,7 @@ router.get('/show/:id', passport.authenticate('jwt', { session: false }), (req, 
 
 // POST route add new journey
 router.post('/new', passport.authenticate('jwt', { session: false }), (req, res) => {
-    // Purpose: Create one example by adding body to DB, and return
-    console.log('=====> Inside POST /journey');
-    // console.log('=====> req.body', req.body); // object used for creating new example
-
-    User.findById(req.user._id).then(user => {
+    User.findById(req.user.id).then(user => {
         Journey.create({
             origin: req.body.origin,
             destination: req.body.destination,
@@ -81,7 +77,7 @@ router.post('/new', passport.authenticate('jwt', { session: false }), (req, res)
             user.save();
             console.log('New journey created', newJourney);
             // res.send(newJourney._id);
-            res.redirect(`/journeys/${newJourney._id}`)
+            res.redirect(`/journeys/show/${newJourney._id}`)
         })
         .catch(err => {
             console.log('Error in example#create:', err);
@@ -101,7 +97,7 @@ router.post('/passenger/:id', passport.authenticate('jwt', { session: false }), 
             journey.passengerUid.push(user);
             journey.save();
             console.log(journey);
-            res.json({journey: journey});
+            res.redirect(`/journeys/show/${journey._id}`)
         });
     })
     .catch(error => {

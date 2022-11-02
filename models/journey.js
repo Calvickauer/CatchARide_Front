@@ -19,10 +19,10 @@ const journeySchema = new Schema({
         type: Number,
         required: true
     },
-    driverUid: {
+    driverUid: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    },
+    }],
     passengerUids: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

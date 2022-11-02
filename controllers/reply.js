@@ -21,7 +21,7 @@ router.post('/new', passport.authenticate('jwt', { session: false }), async (req
         .then(reply => {
             msg.replies.push(reply);
             msg.save()
-            res.redirect(`/`);
+            res.redirect(`/messages/show/${msg.id}`);
         })
         .catch(err => {
             console.log(err);
