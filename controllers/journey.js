@@ -30,15 +30,19 @@ router.post('/new', passport.authenticate('jwt', { session: false }), (req, res)
     console.log('=====> Inside POST /journey');
     // console.log('=====> req.body', req.body); // object used for creating new example
 
-    Journey.create({
-        origin: req.body.origin,
-        destination: req.body.destination,
-        contribution: req.body.contribution,
-        openSeats: req.body.openSeats,
-        driverUid: req.user.id,
-        passengerUids: []
+    User.findById(req.user._id).then(user => {
+        Journey.create({
+            origin: req.body.origin,
+            destination: req.body.destination,
+            contribution: req.body.contribution,
+            openSeats: req.body.openSeats
+        })
     })
     .then(newJourney => {
+        user.journey.push(newJourney);
+        newJourney.driverUid.push(user)
+        newJourney.save();
+        user.save();
         console.log('New journey created', newJourney);
         // res.send(newJourney._id);
         res.redirect(`/journeys/${newJourney._id}`)
