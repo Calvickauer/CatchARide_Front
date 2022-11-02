@@ -52,7 +52,8 @@ router.post('/new', passport.authenticate('jwt', { session: false }), async (req
         res.redirect(`/messages/id/${message.id}`);
         message.save();
         user.save();
-        })
+    })
+
     }).catch(err => {
         console.log(err);
     }); 
