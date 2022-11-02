@@ -5,6 +5,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const { JWT_SECRET } = process.env;
+const User = require('../models/user');
 
 // DB Models
 const Journey = require('../models/journey');
