@@ -44,6 +44,7 @@ const userSchema = new Schema({
         ref: 'Reply'
     }],
     journey: [{
+
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Journey'
     }]
