@@ -5,14 +5,7 @@ const messageSchema = new Schema({
     title: {
         title: String
     },
-    journeyId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Journey'
-    },
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    },
+    
     content: {
         type: String,
         required: true
@@ -25,7 +18,12 @@ const messageSchema = new Schema({
     user: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
+    }],
+       journey: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Journey'
     }]
+    
    
 })
 
