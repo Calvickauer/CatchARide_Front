@@ -49,11 +49,10 @@ router.post('/new', passport.authenticate('jwt', { session: false }), async (req
     }).then(message => {
         message.user.push(user);
         user.messages.push(message);
-        res.redirect(`/messages`);
+        res.redirect(`/messages/id/${message.id}`);
         message.save();
         user.save();
-    })
-
+        })
     }).catch(err => {
         console.log(err);
     }); 
