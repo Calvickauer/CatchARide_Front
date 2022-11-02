@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const Vehicle = require('./vehicle');
 const Message = require('./message');
-const Reply = require('../models/reply');
+const Reply = require('./reply');
 
 const userSchema = new Schema({
     firstName: {
