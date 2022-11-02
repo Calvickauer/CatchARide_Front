@@ -5,20 +5,11 @@ const messageSchema = new Schema({
     title: {
         title: String
     },
-    journeyId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Journey'
-    },
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    },
     content: {
         type: String,
         required: true
     },
-
-        replies: [{
+    replies: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Reply'
     }],
