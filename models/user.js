@@ -5,6 +5,7 @@ const Message = require('./message');
 const Reply = require('./reply');
 const Journey = require('./journey');
 
+
 const userSchema = new Schema({
     firstName: {
         type: String,
