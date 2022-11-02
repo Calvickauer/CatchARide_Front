@@ -76,8 +76,21 @@ router.get('/:id', passport.authenticate('jwt', { session: false }), (req, res) 
     });
 });
 
+// GET route edit one journey
+router.get('/edit/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+    console.log('testing GET id route');
+    Journey.findById(req.params.id)
+    .then(journey => {
+        console.log(journey);
+        res.json({journey: journey});
+    })
+    .catch(error => {
+        console.log(error)
+    });
+});
+
 // PUT route edit one journey
-router.put('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.put('/edit/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
     Journey.findById(req.params.id)
         .then(foundJourney => {
             console.log('journey found', foundJourney);
