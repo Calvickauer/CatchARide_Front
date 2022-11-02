@@ -40,7 +40,8 @@ router.post('/new', passport.authenticate('jwt', { session: false }), (req, res)
     })
     .then(newJourney => {
         console.log('New journey created', newJourney);
-        res.send(newJourney._id);
+        // res.send(newJourney._id);
+        res.redirect(`/journeys/${newJourney._id}`)
     })
     .catch(err => {
         console.log('Error in example#create:', err);
