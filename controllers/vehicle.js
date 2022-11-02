@@ -12,12 +12,28 @@ const Vehicle = require('../models/vehicle');
 const User = require('../models/user');
 
 // Controllers
-router.get('/test', (req, res) => {
+router.get('/', (req, res) => {
     res.json({ message: 'Vehicle endpoint OK! ✅' });
 });
 
+router.get('/test', (req, res) => {
+    Vehicle.find({})
+    .then(cars => {
+        res.json({ cars: cars });
+    })
+    .catch(error => { 
+        console.log('error', error);
+        res.json({ message: "Error ocurred, please try again" });
+    });
+});
+
+
+router.get('/return', (req, res) => {
+    res.json({deleted: 'Deleted'});
+});
+
 router.post('/new', passport.authenticate('jwt', { session: false }), (req, res) => {
-    User.findById(req.body.id)
+    User.findById(req.user.id)
     .then(theUser => {
         console.log(theUser);
         Vehicle.create({
@@ -29,7 +45,7 @@ router.post('/new', passport.authenticate('jwt', { session: false }), (req, res)
         .then(theVehicle => {
             theUser.vehicle.push(theVehicle);
             theUser.save();
-            res.redirect(`/vehicles/vehicle/${theVehicle.id}`);
+            res.redirect(`/vehicles/show/${theVehicle.id}`);
         })  
     })
     .catch(err => {
@@ -38,7 +54,7 @@ router.post('/new', passport.authenticate('jwt', { session: false }), (req, res)
     
 });
 
-router.get('/vehicle/:id', (req, res) => {
+router.get('/show/:id', (req, res) => {
     Vehicle.findById(req.params.id)
     .then(vehicle => {
         console.log(vehicle);
@@ -51,7 +67,7 @@ router.get('/vehicle/:id', (req, res) => {
 
 
 
-router.put('/update/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.put('/edit/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
     Vehicle.findById(req.params.id)
         .then(vehicle => {
             console.log('journey found', vehicle);
@@ -86,7 +102,7 @@ router.delete('/delete/:id', (req, res) => {
     Vehicle.findByIdAndRemove(req.params.id)
     .then(response => {
         console.log(`Vehicle ${req.params.id} was deleted`, response);
-        res.redirect(`/vehicles/test`);
+        res.redirect(`/return`);
     })
     .catch(err => {
         console.log('Error in vehicle delete:', err);
