@@ -104,7 +104,7 @@ router.post('/login', async (req, res) => {
 
 // private
 router.get('/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
-   User.findById(req.user._id).populate('messages').populate('journey').populate('vehicle').exec()
+   User.findById(req.user._id).populate('messages').populate('journey').populate('vehicle').populate('reviews').exec()
    .then(user => {
     console.log('====> inside /profile');
     console.log(req.body);
@@ -118,6 +118,20 @@ router.get('/profile', passport.authenticate('jwt', { session: false }), (req, r
    
 });
 
+router.get('/profile/go/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+    User.findById(req.params.id).populate('messages').populate('journey').populate('vehicle').populate('reviews').exec()
+    .then(user => {
+     console.log('====> inside /profile');
+     console.log(req.body);
+     console.log('====> user')
+     console.log(req.user);
+     const { id, firstName, lastName, email, messages, journey, vehicle } = user; // object with user object inside
+     res.json({ id, firstName, lastName, email, messages, journey, vehicle });
+    }).catch(err => {
+     console.log('ERROR')
+    })
+    
+ });
 
 
 //Exports
