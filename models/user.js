@@ -48,6 +48,10 @@ const userSchema = new Schema({
 
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Journey'
+    }],
+    reviews: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Reviews'
     }]
 })
 

@@ -9,9 +9,9 @@ const { JWT_SECRET } = process.env;
 
 // DB Models
 const Reply = require('../models/reply');
-const Message = require('../models/message');
+const Reviews = require('../models/reviews');
 
-router.post('/new', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.post('/message/new', passport.authenticate('jwt', { session: false }), async (req, res) => {
      Message.findById(req.body.id)
      .then(msg => {
         console.log(msg)
@@ -27,9 +27,26 @@ router.post('/new', passport.authenticate('jwt', { session: false }), async (req
             console.log(err);
         })
      })
-})
+});
 
 
+router.post('/review/new', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    Reviews.findById(req.body.id)
+    .then(msg => {
+       console.log(msg)
+       Reply.create({
+           content: req.body.content
+       })
+       .then(reply => {
+           msg.replies.push(reply);
+           msg.save()
+           res.redirect(`/`);
+       })
+       .catch(err => {
+           console.log(err);
+       })
+    })
+});
 
 
 module.exports = router;
