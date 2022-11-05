@@ -71,7 +71,7 @@ router.post('/new', passport.authenticate('jwt', { session: false }), async (req
                     review.user.push(user2);
                     review.toUser.push(user);
                     user.review.push(message);
-                    res.redirect(`/messages/show/${message.id}`);
+                    res.redirect(`/reviews/show/${review.id}`);
                     review.save();
                     user.save();
                 })
@@ -94,9 +94,9 @@ router.put('/edit/:id', (req, res) => {
             }, {
                 upsert: true
             })
-                .then(post => {
+                .then(review => {
                     console.log('Post was updated', post);
-                    res.redirect(`/messages`);
+                    res.redirect(`/reviews/show/${review.id}`);
                 })
                 .catch(error => {
                     console.log('error', error)
