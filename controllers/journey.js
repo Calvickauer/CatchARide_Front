@@ -142,7 +142,8 @@ router.put('/edit/:id', passport.authenticate('jwt', { session: false }), (req, 
                     origin: req.body.origin ? req.body.origin : foundJourney.origin,
                     destination: req.body.destination ? req.body.destination : foundJourney.destination,
                     contribution: req.body.contribution ? req.body.contribution : foundJourney.contribution,
-                    openSeats: req.body.openSeats ? req.body.openSeats : foundJourney.openSeats
+                    openSeats: req.body.openSeats ? req.body.openSeats : foundJourney.openSeats,
+                    date: req.body.date ? req.body.date : foundJourney.date
                 })
                 .then(journey => {
                     console.log('Journey was updated', journey);
