@@ -144,7 +144,8 @@ router.put('/edit/:id', passport.authenticate('jwt', { session: false }), (req, 
                 })
                 .then(journey => {
                     console.log('Journey was updated', journey);
-                    res.redirect(`/journeys/show/${req.params.id}`)
+                    // res.redirect(`/journeys/show/${journey.id}`)
+                    res.send(journey);
                 })
                 .catch(error => {
                     console.log('error', error)
