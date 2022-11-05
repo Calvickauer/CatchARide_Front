@@ -68,7 +68,8 @@ router.post('/new', passport.authenticate('jwt', { session: false }), (req, res)
             origin: req.body.origin,
             destination: req.body.destination,
             contribution: req.body.contribution,
-            openSeats: req.body.openSeats
+            openSeats: req.body.openSeats,
+            date: req.body.date
         })    
         .then(newJourney => {
             user.journey.push(newJourney);
@@ -76,8 +77,8 @@ router.post('/new', passport.authenticate('jwt', { session: false }), (req, res)
             newJourney.save();
             user.save();
             console.log('New journey created', newJourney);
-            // res.send(newJourney._id);
-            res.redirect(`/journeys/show/${newJourney._id}`)
+            res.send(newJourney);
+            // res.redirect(`/journeys/show/${newJourney._id}`)
         })
         .catch(err => {
             console.log('Error in example#create:', err);
@@ -94,7 +95,8 @@ router.post('/request', passport.authenticate('jwt', { session: false }), (req, 
             origin: req.body.origin,
             destination: req.body.destination,
             contribution: req.body.contribution,
-            openSeats: req.body.openSeats
+            openSeats: req.body.openSeats,
+            date: req.body.date
         })    
         .then(newJourney => {
             user.journey.push(newJourney);
@@ -102,8 +104,8 @@ router.post('/request', passport.authenticate('jwt', { session: false }), (req, 
             newJourney.save();
             user.save();
             console.log('New journey created', newJourney);
-            // res.send(newJourney._id);
-            res.redirect(`/journeys/show/${newJourney._id}`)
+            res.send(newJourney);
+            // res.redirect(`/journeys/show/${newJourney._id}`)
         })
         .catch(err => {
             console.log('Error in example#create:', err);
