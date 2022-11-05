@@ -104,21 +104,60 @@ router.post('/login', async (req, res) => {
 
 // private
 router.get('/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
-   User.findById(req.user._id).populate('messages').populate('journey').populate('vehicle').exec()
+   User.findById(req.user._id).populate('messages').populate('journey').populate('vehicle').populate('reviews').exec()
    .then(user => {
     console.log('====> inside /profile');
     console.log(req.body);
     console.log('====> user')
     console.log(req.user);
-    const { id, firstName, lastName, email, messages, journey, vehicle } = user; // object with user object inside
-    res.json({ id, firstName, lastName, email, messages, journey, vehicle });
+    const { id, firstName, lastName, email, messages, journey, vehicle, reviews } = user; // object with user object inside
+    res.json({ id, firstName, lastName, email, messages, journey, vehicle, reviews });
    }).catch(err => {
     console.log('ERROR')
    })
    
 });
 
+router.get('/profile/go/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+    User.findById(req.params.id).populate('messages').populate('journey').populate('vehicle').populate('reviews').exec()
+    .then(user => {
+     console.log('====> inside /profile');
+     console.log(req.body);
+     console.log('====> user')
+     console.log(req.user);
+     const { id, firstName, lastName, email, messages, journey, vehicle, reviews } = user; // object with user object inside
+     res.json({ id, firstName, lastName, email, messages, journey, vehicle, reviews });
+    }).catch(err => {
+     console.log('ERROR')
+    })
+    
+ });
 
+//  router.put('/edit/:id', (req, res) => {
+//     console.log('route is being on PUT')
+//     User.findById(req.user.id)
+//     .then(foundMsg => {
+//         console.log('Message found', foundMsg);
+//         Message.findByIdAndUpdate(req.params.id, { 
+//                 title: req.body.title ? req.body.title : foundMsg.title,
+//                 content: req.body.content ? req.body.content : foundMsg.content,
+//         }, { 
+//             upsert: true 
+//         })
+//         .then(post => {
+//             console.log('Post was updated', post);
+//             res.redirect(`/messages`);
+//         })
+//         .catch(error => {
+//             console.log('error', error) 
+//             res.json({ message: "Error ocurred, please try again" })
+//         })
+//     })
+//     .catch(error => {
+//         console.log('error', error) 
+//         res.json({ message: "Error ocurred, please try again" })
+//     })
+// });
 
 //Exports
 module.exports = router;

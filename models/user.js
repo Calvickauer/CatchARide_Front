@@ -4,6 +4,7 @@ const Vehicle = require('./vehicle');
 const Message = require('./message');
 const Reply = require('./reply');
 const Journey = require('./journey');
+const Reviews = require('./reviews');
 
 
 const userSchema = new Schema({
@@ -34,7 +35,7 @@ const userSchema = new Schema({
     },
     driver: {
         type: Boolean,
-        default: true
+        default: false
     },
     vehicle: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -52,6 +53,10 @@ const userSchema = new Schema({
 
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Journey'
+    }],
+    reviews: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Reviews'
     }]
 })
 

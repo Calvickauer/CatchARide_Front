@@ -88,6 +88,31 @@ router.post('/new', passport.authenticate('jwt', { session: false }), (req, res)
 });
 
 
+router.post('/request', passport.authenticate('jwt', { session: false }), (req, res) => {
+    User.findById(req.user.id).then(user => {
+        Journey.create({
+            origin: req.body.origin,
+            destination: req.body.destination,
+            contribution: req.body.contribution,
+            openSeats: req.body.openSeats
+        })    
+        .then(newJourney => {
+            user.journey.push(newJourney);
+            newJourney.passengerUids.push(user)
+            newJourney.save();
+            user.save();
+            console.log('New journey created', newJourney);
+            // res.send(newJourney._id);
+            res.redirect(`/journeys/show/${newJourney._id}`)
+        })
+        .catch(err => {
+            console.log('Error in example#create:', err);
+            res.json({ message: 'Error occured... Please try again.'});
+        })
+    })
+
+});
+
 // to add passengers
 router.post('/passenger/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
     Journey.findById(req.params.id).populate('messages').populate('driverUid').populate('passengerUid').exec()

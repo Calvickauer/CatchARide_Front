@@ -119,28 +119,6 @@ router.delete('/delete/:id', (req, res) => {
     });
 });
 
-
-// POST route add passengers to journey // will comeback to this.
-// router.post('/:id/passengers/add', passport.authenticate('jwt', { session: false }), (req, res) => {
-//     Message.findById(req.params.id)
-//      .then(msg => {
-//         console.log(msg.journeyId);
-//         Journey.findById(msg.journeyId)
-//         .then(journey => {
-//             journey.passengerUids.push(msg.userId); 
-//             journey.save();
-//             res.redirect(`/journeys/${journey.id}`);
-//             })
-//             .catch(err => {
-//                 console.log(err);
-//             });
-//         })
-//         .catch(err => {
-//             console.log(err);
-//         });
-// });
-
-
 module.exports = router;
 
 //
