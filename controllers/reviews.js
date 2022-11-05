@@ -58,7 +58,7 @@ router.get('/show/:id', passport.authenticate('jwt', { session: false }), async 
 router.post('/new', passport.authenticate('jwt', { session: false }), async (req, res) => {
     console.log('body', req.body);
     console.log('user', req.user);
-    User.findById(req.params.id)
+    User.findById(req.body.id)
         .then(user => {
             User.findById(req.user.id)
                 .then(user2 => {
