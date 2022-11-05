@@ -32,6 +32,10 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    driver: {
+        type: Boolean,
+        default: true
+    },
     vehicle: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Vehicle'
