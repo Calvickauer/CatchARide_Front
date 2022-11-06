@@ -16,8 +16,19 @@ router.get('/test', (req, res) => {
     res.json({ message: 'Vehicle endpoint OK! ✅' });
 });
 
+router.get('/vehicle/:id', (req, res) => {
+    Vehicle.findById(req.params.id)
+    .then(vehicle => {
+        console.log(vehicle);
+        res.json({vehicle: vehicle});
+    })
+    .catch(error => {
+        console.log(error)
+    });
+});
+
 router.post('/new', passport.authenticate('jwt', { session: false }), (req, res) => {
-    User.findById(req.body.id)
+    User.findById(req.user.id)
     .then(theUser => {
         console.log(theUser);
         Vehicle.create({
@@ -38,16 +49,7 @@ router.post('/new', passport.authenticate('jwt', { session: false }), (req, res)
     
 });
 
-router.get('/vehicle/:id', (req, res) => {
-    Vehicle.findById(req.params.id)
-    .then(vehicle => {
-        console.log(vehicle);
-        res.json({vehicle: vehicle});
-    })
-    .catch(error => {
-        console.log(error)
-    });
-});
+
 
 
 
