@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const messageSchema = new Schema({
+const reviewsSchema = new Schema({
     title: {
         title: String
     },
@@ -18,14 +18,14 @@ const messageSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }],
-       journey: [{
+       toUser: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Journey'
+        ref: 'User'
     }]
     
    
 })
 
-const Message = mongoose.model('Message', messageSchema);
+const Reviews = mongoose.model('Reviews', reviewsSchema);
 
-module.exports = Message;
+module.exports = Reviews;

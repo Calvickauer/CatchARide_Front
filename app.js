@@ -6,6 +6,7 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 require('./config/passport')(passport);
 
+
 // App Set up
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -40,7 +41,7 @@ app.use('/vehicles', require('./controllers/vehicle'));
 app.use('/journeys', require('./controllers/journey'));
 app.use('/messages', require('./controllers/message'));
 app.use('/reply', require('./controllers/reply'));
-
+app.use('/reviews', require('./controllers/message'));
 
 // Server
 const server = app.listen(PORT, () => console.log(`Server is running on PORT: ${PORT}`));

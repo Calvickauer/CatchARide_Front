@@ -2,7 +2,10 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const Vehicle = require('./vehicle');
 const Message = require('./message');
-const Reply = require('../models/reply');
+const Reply = require('./reply');
+const Journey = require('./journey');
+const Reviews = require('./reviews');
+
 
 const userSchema = new Schema({
     firstName: {
@@ -30,6 +33,10 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    driver: {
+        type: Boolean,
+        default: false
+    },
     vehicle: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Vehicle'
@@ -41,6 +48,15 @@ const userSchema = new Schema({
     replies: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Reply'
+    }],
+    journey: [{
+
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Journey'
+    }],
+    reviews: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Reviews'
     }]
 })
 

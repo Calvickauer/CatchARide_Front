@@ -5,6 +5,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const { JWT_SECRET } = process.env;
+const User = require('../models/user');
 
 // DB Models
 const Journey = require('../models/journey');
@@ -13,8 +14,26 @@ const Journey = require('../models/journey');
 
 
 // GET route display all journeys (this may need to go on user controller for '/profile' route)
-router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Journey.find({driverUid: req.user.id})
+// router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
+//     Journey.find({driverUid: req.user.id})
+//         .then(journeys => {
+//             console.log('All journeys', journeys);
+//             res.json({journeys: journeys});
+//         })
+//         .catch(error => {
+//             console.log(error)
+//         });
+// });
+
+router.get('/', (req, res) => {
+    res.json({ message: 'Journeys endpoint OK! ✅' });
+});
+
+
+// show all journeys from all users, test only
+
+router.get('/test', (req, res) => {
+    Journey.find({})
         .then(journeys => {
             console.log('All journeys', journeys);
             res.json({journeys: journeys});
@@ -24,50 +43,14 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
         });
 });
 
-// POST route add new journey
-router.post('/new', passport.authenticate('jwt', { session: false }), (req, res) => {
-    // Purpose: Create one example by adding body to DB, and return
-    console.log('=====> Inside POST /journey');
-    // console.log('=====> req.body', req.body); // object used for creating new example
-
-    Journey.create({
-        origin: req.body.origin,
-        destination: req.body.destination,
-        contribution: req.body.contribution,
-        openSeats: req.body.openSeats,
-        driverUid: req.user.id,
-        passengerUids: []
-    })
-    .then(newJourney => {
-        console.log('New journey created', newJourney);
-        // res.send(newJourney._id);
-        res.redirect(`/journeys/${newJourney._id}`)
-    })
-    .catch(err => {
-        console.log('Error in example#create:', err);
-        res.json({ message: 'Error occured... Please try again.'});
-    })
+router.get('/return', (req, res) => {
+    res.json({deleted: 'Deleted'});
 });
 
-// // POST route add passengers to journey
-// router.post('/:id/passengers/add', passport.authenticate('jwt', { session: false }), (req, res) => {
-//     Journey.findById(req.params.id)
-//      .then(journey => {
-//         console.log(journey);
-//         journey.passengerUids.push(___); // unsure how to reference passender UID from message
-//         journey.save();
-//         res.redirect(`/journeys/${journey.id}`);
-//         })
-//         .catch(err => {
-//             console.log(err);
-//         });
-// });
-
-
 // GET route display one journey
-router.get('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.get('/show/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
     console.log('testing GET id route');
-    Journey.findById(req.params.id)
+    Journey.findById(req.params.id).populate('messages').populate('driverUid').populate('passengerUid').exec()
     .then(journey => {
         console.log(journey);
         res.json({journey: journey});
@@ -77,13 +60,72 @@ router.get('/:id', passport.authenticate('jwt', { session: false }), (req, res) 
     });
 });
 
-// GET route edit one journey
-router.get('/edit/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
-    console.log('testing GET id route');
-    Journey.findById(req.params.id)
+
+// POST route add new journey
+router.post('/new', passport.authenticate('jwt', { session: false }), (req, res) => {
+    User.findById(req.user.id).then(user => {
+        Journey.create({
+            origin: req.body.origin,
+            destination: req.body.destination,
+            contribution: req.body.contribution,
+            openSeats: req.body.openSeats,
+            date: req.body.date
+        })    
+        .then(newJourney => {
+            user.journey.push(newJourney);
+            newJourney.driverUid.push(user)
+            newJourney.save();
+            user.save();
+            console.log('New journey created', newJourney);
+            res.send(newJourney);
+            // res.redirect(`/journeys/show/${newJourney._id}`)
+        })
+        .catch(err => {
+            console.log('Error in example#create:', err);
+            res.json({ message: 'Error occured... Please try again.'});
+        })
+    })
+
+});
+
+
+router.post('/request', passport.authenticate('jwt', { session: false }), (req, res) => {
+    User.findById(req.user.id).then(user => {
+        Journey.create({
+            origin: req.body.origin,
+            destination: req.body.destination,
+            contribution: req.body.contribution,
+            openSeats: req.body.openSeats,
+            date: req.body.date
+        })    
+        .then(newJourney => {
+            user.journey.push(newJourney);
+            newJourney.passengerUids.push(user)
+            newJourney.save();
+            user.save();
+            console.log('New journey created', newJourney);
+            res.send(newJourney);
+            // res.redirect(`/journeys/show/${newJourney._id}`)
+        })
+        .catch(err => {
+            console.log('Error in example#create:', err);
+            res.json({ message: 'Error occured... Please try again.'});
+        })
+    })
+
+});
+
+// to add passengers
+router.post('/passenger/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+    Journey.findById(req.params.id).populate('messages').populate('driverUid').populate('passengerUid').exec()
     .then(journey => {
-        console.log(journey);
-        res.json({journey: journey});
+        User.findById(req.user.id)
+        .then(user => {
+            journey.passengerUid.push(user);
+            journey.save();
+            console.log(journey);
+            res.redirect(`/journeys/show/${journey._id}`)
+        });
     })
     .catch(error => {
         console.log(error)
@@ -100,11 +142,13 @@ router.put('/edit/:id', passport.authenticate('jwt', { session: false }), (req, 
                     origin: req.body.origin ? req.body.origin : foundJourney.origin,
                     destination: req.body.destination ? req.body.destination : foundJourney.destination,
                     contribution: req.body.contribution ? req.body.contribution : foundJourney.contribution,
-                    openSeats: req.body.openSeats ? req.body.openSeats : foundJourney.openSeats
+                    openSeats: req.body.openSeats ? req.body.openSeats : foundJourney.openSeats,
+                    date: req.body.date ? req.body.date : foundJourney.date
                 })
                 .then(journey => {
                     console.log('Journey was updated', journey);
-                    res.redirect(`/journeys/${req.params.id}`)
+                    // res.redirect(`/journeys/show/${journey.id}`)
+                    res.send(journey);
                 })
                 .catch(error => {
                     console.log('error', error)
@@ -131,10 +175,33 @@ router.delete('/:id', passport.authenticate('jwt', { session: false }), (req, re
 
 // DELETE route to remove one passenger
 router.delete('/passengers/remove', passport.authenticate('jwt', { session: false }), (req, res) => {
+    Journey.findById(req.body.id)
+    .then(journey => {
+        let target = indexOf(req.body.target);
+        if (target > -1) {
+            journey.splice(target, 1);
+        }
+        return journey;
+        res.redirect('/return');
+
+    })
 
 });
 
 // DELETE route for passenger to remove themselves
+router.delete('/passengers/leave', passport.authenticate('jwt', { session: false }), (req, res) => {
+    Journey.findById(req.body.id)
+    .then(journey => {
+        let target = indexOf(req.user.id);
+        if (target > -1) {
+            journey.splice(target, 1);
+        }
+        return journey;
+        res.redirect('/return');
+
+    })
+
+});
 
 // Exports
 module.exports = router;
