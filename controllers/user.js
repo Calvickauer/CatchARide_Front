@@ -104,29 +104,40 @@ router.post('/login', async (req, res) => {
 
 // private
 router.get('/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
-   User.findById(req.user._id).populate('messages').populate('journey').populate('vehicle').populate('reviews').exec()
+   User.findById(req.user.id).populate('journey').populate('vehicle').populate('reviews').exec()
    .then(user => {
     console.log('====> inside /profile');
     console.log(req.body);
     console.log('====> user')
     console.log(req.user);
-    const { id, firstName, lastName, email, messages, journey, vehicle, reviews } = user; // object with user object inside
-    res.json({ id, firstName, lastName, email, messages, journey, vehicle, reviews });
+    const { id, firstName, lastName, email, journey, vehicle, reviews } = user; // object with user object inside
+    const rev =  reviews.map((r, idx) => {
+        return ({content: r.content,
+            title: r.title,
+        id: r.id, key: idx});
+      })
+    res.json({ id, firstName, lastName, email, journey, vehicle, rev });
    }).catch(err => {
-    console.log('ERROR')
+    console.log('ERROR', err)
    })
    
 });
 
 router.get('/profile/go/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
-    User.findById(req.params.id).populate('messages').populate('journey').populate('vehicle').populate('reviews').exec()
+    User.findById(req.params.id).populate('journey').populate('vehicle').populate('reviews').exec()
     .then(user => {
      console.log('====> inside /profile');
      console.log(req.body);
      console.log('====> user')
      console.log(req.user);
-     const { id, firstName, lastName, email, messages, journey, vehicle, reviews } = user; // object with user object inside
-     res.json({ id, firstName, lastName, email, messages, journey, vehicle, reviews });
+     const { id, firstName, lastName, email, journey, vehicle, reviews } = user; // object with user object inside
+      const rev =  reviews.map((r, idx) => {
+        return {content: r.content,
+        id: r.id}
+      })
+
+     res.json({ id, firstName, lastName, email, rev});
+   
     }).catch(err => {
      console.log('ERROR')
     })

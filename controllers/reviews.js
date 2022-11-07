@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
 // show all messages from all users, for test only
 
 router.get('/test', (req, res) => {
-    Reviews.find({}).populate('replies').exec()
+    Reviews.find({})
         .then(msg => {
             res.json({ reviews: msg });
         })
@@ -60,20 +60,18 @@ router.post('/new', passport.authenticate('jwt', { session: false }), async (req
     console.log('user', req.user);
     User.findById(req.body.id)
         .then(user => {
-            User.findById(req.user.id)
-                .then(user2 => {
+            console.log('USER', user)
                     Reviews.create({
                         title: req.body.title,
                         content: req.body.content
                     })
-                })
                 .then(review => {
-                    review.user.push(user2);
+                    review.user.push(req.user.id);
                     review.toUser.push(user);
-                    user.review.push(message);
-                    res.redirect(`/reviews/show/${review.id}`);
+                    user.reviews.push(review);
                     review.save();
                     user.save();
+                    res.redirect(`/reviews/show/${review.id}`);
                 })
 
         }).catch(err => {
