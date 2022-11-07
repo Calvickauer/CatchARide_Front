@@ -3,10 +3,8 @@ const { Schema } = mongoose;
 
 const reviewsSchema = new Schema({
     title: {
-        title: String
-    },
-
-    content: {
+        type: String
+    }, content: {
         type: String,
         required: true
     },

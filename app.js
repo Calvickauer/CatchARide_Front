@@ -41,7 +41,7 @@ app.use('/vehicles', require('./controllers/vehicle'));
 app.use('/journeys', require('./controllers/journey'));
 app.use('/messages', require('./controllers/message'));
 app.use('/reply', require('./controllers/reply'));
-app.use('/reviews', require('./controllers/message'));
+app.use('/reviews', require('./controllers/reviews'));
 
 // Server
 const server = app.listen(PORT, () => console.log(`Server is running on PORT: ${PORT}`));
