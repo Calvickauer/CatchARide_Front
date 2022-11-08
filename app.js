@@ -5,7 +5,7 @@ const cors = require('cors');
 const passport = require('passport');
 const mongoose = require('mongoose');
 require('./config/passport')(passport);
-
+bodyParser = require('body-parser');
 
 // App Set up
 const app = express();
@@ -16,6 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json()); // JSON parsing
 app.use(cors()); // allow all CORS requests
 app.use(passport.initialize());
+app.use('/public', express.static('public'));
 
 // Database Set Up
 const MONGO_CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING;
@@ -42,6 +43,8 @@ app.use('/journeys', require('./controllers/journey'));
 app.use('/messages', require('./controllers/message'));
 app.use('/reply', require('./controllers/reply'));
 app.use('/reviews', require('./controllers/reviews'));
+app.use('/images', require('./controllers/images'));
+
 
 // Server
 const server = app.listen(PORT, () => console.log(`Server is running on PORT: ${PORT}`));
