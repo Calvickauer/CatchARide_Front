@@ -144,31 +144,31 @@ router.get('/profile/go/:id', passport.authenticate('jwt', { session: false }), 
     
  });
 
-//  router.put('/edit/:id', (req, res) => {
-//     console.log('route is being on PUT')
-//     User.findById(req.user.id)
-//     .then(foundMsg => {
-//         console.log('Message found', foundMsg);
-//         Message.findByIdAndUpdate(req.params.id, { 
-//                 title: req.body.title ? req.body.title : foundMsg.title,
-//                 content: req.body.content ? req.body.content : foundMsg.content,
-//         }, { 
-//             upsert: true 
-//         })
-//         .then(post => {
-//             console.log('Post was updated', post);
-//             res.redirect(`/messages`);
-//         })
-//         .catch(error => {
-//             console.log('error', error) 
-//             res.json({ message: "Error ocurred, please try again" })
-//         })
-//     })
-//     .catch(error => {
-//         console.log('error', error) 
-//         res.json({ message: "Error ocurred, please try again" })
-//     })
-// });
+ router.put('/edit', passport.authenticate('jwt', { session: false }), (req, res) => {
+    console.log('route is being on PUT')
+    User.findById(req.user.id)
+    .then(foundUser => {
+        console.log('Message found', foundUser);
+        User.findByIdAndUpdate(foundUser.id, { 
+                firstName: req.body.firstName ? req.body.firstName : foundMsg.firstName,
+                lastName: req.body.lastName ? req.body.lastName : foundMsg.lastName,
+        }, { 
+            upsert: true 
+        })
+        .then(user => {
+            console.log('User was updated', user);
+            res.send(user);
+        })
+        .catch(error => {
+            console.log('error', error) 
+            res.json({ message: "Error ocurred, please try again" })
+        })
+    })
+    .catch(error => {
+        console.log('error', error) 
+        res.json({ message: "Error ocurred, please try again" })
+    })
+});
 
 //Exports
 module.exports = router;
