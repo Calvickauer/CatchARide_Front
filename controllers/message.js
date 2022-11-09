@@ -153,7 +153,7 @@ router.delete('/delete/:id', (req, res) => {
 
 // show all messages sent to user
 router.get('/inbox', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Journey.find({ driverUid: req.user.id, messages: { $ne: [] } }).populate('messages').populate('user').exec()
+    Journey.find({ driverUid: req.user.id, messages: { $ne: [] } }).populate({path:'messages', populate:{path:'user', model:'User'}}).populate('user').exec()
         .then(journeys => {
             res.send(journeys);
         })
