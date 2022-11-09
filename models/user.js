@@ -57,6 +57,10 @@ const userSchema = new Schema({
     reviews: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Reviews'
+    }],
+    photos: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Images'
     }]
 })
 
