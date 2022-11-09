@@ -181,7 +181,8 @@ router.delete('/:id/passengers/remove', passport.authenticate('jwt', { session: 
         let target = array.indexOf(req.body.pId);
         if (target > -1) {
             array.splice(target, 1);
-        }
+        };
+        journey.save();
         res.send(journey);
     })
     .catch(error => {
@@ -199,7 +200,8 @@ router.delete('/:id/passengers/leave', passport.authenticate('jwt', { session: f
         let target = array.indexOf(req.user.id);
         if (target > -1) {
             array.splice(target, 1);
-        }
+        };
+        journey.save();
         res.send(journey);
     })
     .catch(error => {
