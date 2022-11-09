@@ -7,6 +7,7 @@ const router = express.Router();
 const DIR = './public/';
 const Images = require('../models/images');
 const passport = require('passport');
+const User = require('../models/user');
 
 // const storage = multer.diskStorage({
 //     destination: (req, file, cb) => {
@@ -38,28 +39,27 @@ router.get("/", (req, res, next) => {
     });
 });
 
-router.post('/new/', upload.single('file'), passport.authenticate('jwt', { session: false }), async (req, res) => {
-User.findById(req.user.id)
-.then(userFound => {
+router.post('/new', upload.single('file'), passport.authenticate('jwt', { session: false }), async (req, res) => {
     Images.create({
         profileImg: new Buffer(req.body.file.split(',')[1], 'base64')
-        
-        
     })
     .then(res => {
-        user.photos.push(res);
-        user.save();
+        console.log (res)
+        User.findById(req.user.id)
+        .then(userFound => {
+            userFound.photos.push(res);
+            userFound.save();
+        })
+       
         console.log('Created Image', res)
     }).catch(err => {
         console.log(err);
     })
     console.log('request from front end', req.body);
-}).catch(err => {
-    console.log(err);
-});
 })
 
-router.get('/show/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
+
+router.get('/show/:id',  async (req, res) => {
     Images.findById(req.params.id)
     .then(img => {
         res.send({ image: img.profileImg });
