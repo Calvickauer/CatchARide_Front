@@ -17,6 +17,10 @@ const vehicleSchema = new Schema({
     seats: {
         type: Number,
         required: true
+    },
+    url: {
+        type: String,
+        required: false
     }
 })
 

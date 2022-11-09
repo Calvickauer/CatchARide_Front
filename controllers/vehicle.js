@@ -16,20 +16,15 @@ router.get('/', (req, res) => {
     res.json({ message: 'Vehicle endpoint OK! ✅' });
 });
 
-router.get('/test', (req, res) => {
-    Vehicle.find({})
-    .then(cars => {
-        res.json({ cars: cars });
+router.get('/vehicle/:id', (req, res) => {
+    Vehicle.findById(req.params.id)
+    .then(vehicle => {
+        console.log(vehicle);
+        res.json({vehicle: vehicle});
     })
-    .catch(error => { 
-        console.log('error', error);
-        res.json({ message: "Error ocurred, please try again" });
+    .catch(error => {
+        console.log(error)
     });
-});
-
-
-router.get('/return', (req, res) => {
-    res.json({deleted: 'Deleted'});
 });
 
 router.post('/new', passport.authenticate('jwt', { session: false }), (req, res) => {
@@ -40,7 +35,8 @@ router.post('/new', passport.authenticate('jwt', { session: false }), (req, res)
             make: req.body.make,
             model: req.body.model,
             year: req.body.year,
-            seats: req.body.seats
+            seats: req.body.seats,
+            url: req.body.url
         }) 
         .then(theVehicle => {
             theUser.vehicle.push(theVehicle);
@@ -70,7 +66,7 @@ router.get('/show/:id', (req, res) => {
 router.put('/edit/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
     Vehicle.findById(req.params.id)
         .then(vehicle => {
-            console.log('journey found', vehicle);
+            console.log('vehicle found', vehicle);
             Vehicle.findByIdAndUpdate(req.params.id,
                 {
                     make: req.body.make ? req.body.make : vehicle.make,
@@ -80,16 +76,17 @@ router.put('/edit/:id', passport.authenticate('jwt', { session: false }), (req, 
                 })
                 .then(vehicle => {
                     console.log('vehicle was updated', vehicle);
-                    res.redirect(`/vehicles/vehicle/${req.params.id}`)
+                    res.send('temp');
+                    //res.redirect(`/vehicles/vehicle/${req.params.id}`)
                 })
                 .catch(error => {
                     console.log('error', error)
-                    res.json({ message: "Error ocurred, please try again" })
+                    res.send('eror res send')
                 })
         })
         .catch(error => {
             console.log('error', error)
-            res.json({ message: "Error ocurred, please try again" })
+            res.send('error')
         })
 });
 
