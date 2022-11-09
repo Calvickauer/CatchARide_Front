@@ -110,13 +110,13 @@ router.get('/profile', passport.authenticate('jwt', { session: false }), (req, r
     console.log(req.body);
     console.log('====> user')
     console.log(req.user);
-    const { id, firstName, lastName, email, journey, vehicle, reviews } = user; // object with user object inside
+    const { id, firstName, lastName, email, journey, vehicle, reviews, photos } = user; // object with user object inside
     const rev =  reviews.map((r, idx) => {
         return ({content: r.content,
             title: r.title,
         id: r.id, key: idx});
       })
-    res.json({ id, firstName, lastName, email, journey, vehicle, rev });
+    res.json({ id, firstName, lastName, email, journey, vehicle, rev, photos });
    }).catch(err => {
     console.log('ERROR', err)
    })
