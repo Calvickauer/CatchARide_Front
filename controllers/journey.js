@@ -117,14 +117,14 @@ router.post('/request', passport.authenticate('jwt', { session: false }), (req, 
 
 // to add passengers
 router.post('/passenger/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Journey.findById(req.params.id).populate('messages').populate('driverUid').populate('passengerUid').exec()
+    Journey.findById(req.params.id).populate('messages').populate('driverUid').populate('passengerUids').exec()
     .then(journey => {
-        User.findById(req.user.id)
+        User.findById(req.body.uid) // need to edit this so that it pulls user ID from the user who sent the message
         .then(user => {
-            journey.passengerUid.push(user);
+            journey.passengerUids.push(user);
             journey.save();
             console.log(journey);
-            res.redirect(`/journeys/show/${journey._id}`)
+            res.send(journey);
         });
     })
     .catch(error => {
@@ -174,33 +174,40 @@ router.delete('/:id', passport.authenticate('jwt', { session: false }), (req, re
 });
 
 // DELETE route to remove one passenger
-router.delete('/passengers/remove', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Journey.findById(req.body.id)
+router.delete('/:id/passengers/remove', passport.authenticate('jwt', { session: false }), (req, res) => {
+    Journey.findById(req.params.id)
     .then(journey => {
-        let target = indexOf(req.body.target);
+        let array = journey.passengerUids;
+        let target = array.indexOf(req.body.pId);
         if (target > -1) {
-            journey.splice(target, 1);
-        }
-        return journey;
-        res.redirect('/return');
-
+            array.splice(target, 1);
+        };
+        journey.save();
+        res.send(journey);
     })
-
+    .catch(error => {
+        console.log('error', error)
+        res.json({ message: "Error ocurred, passenger not deleted" })
+    });
 });
 
+
 // DELETE route for passenger to remove themselves
-router.delete('/passengers/leave', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Journey.findById(req.body.id)
+router.delete('/:id/passengers/leave', passport.authenticate('jwt', { session: false }), (req, res) => {
+    Journey.findById(req.params.id)
     .then(journey => {
-        let target = indexOf(req.user.id);
+        let array = journey.passengerUids;
+        let target = array.indexOf(req.user.id);
         if (target > -1) {
-            journey.splice(target, 1);
-        }
-        return journey;
-        res.redirect('/return');
-
+            array.splice(target, 1);
+        };
+        journey.save();
+        res.send(journey);
     })
-
+    .catch(error => {
+        console.log('error', error)
+        res.json({ message: "Error ocurred, passenger not deleted" })
+    });
 });
 
 // Exports
