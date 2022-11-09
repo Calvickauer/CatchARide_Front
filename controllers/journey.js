@@ -13,7 +13,7 @@ const Journey = require('../models/journey');
 // Controllers
 
 
-// GET route display all journeys (this may need to go on user controller for '/profile' route)
+// // GET route display all journeys
 // router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
 //     Journey.find({driverUid: req.user.id})
 //         .then(journeys => {
@@ -25,15 +25,14 @@ const Journey = require('../models/journey');
 //         });
 // });
 
-router.get('/', (req, res) => {
-    res.json({ message: 'Journeys endpoint OK! ✅' });
-});
+// router.get('/', (req, res) => {
+//     res.json({ message: 'Journeys endpoint OK! ✅' });
+// });
 
 
-// show all journeys from all users, test only
-
-router.get('/test', (req, res) => {
-    Journey.find({})
+// show all journeys from all users
+router.get('/all', (req, res) => {
+    Journey.find({}).populate('driverUid')
         .then(journeys => {
             console.log('All journeys', journeys);
             res.json({journeys: journeys});
