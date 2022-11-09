@@ -5,6 +5,7 @@ const Message = require('./message');
 const Reply = require('./reply');
 const Journey = require('./journey');
 const Reviews = require('./reviews');
+const Images = require('./images');
 
 
 const userSchema = new Schema({
