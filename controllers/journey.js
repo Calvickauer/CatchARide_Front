@@ -116,10 +116,10 @@ router.post('/request', passport.authenticate('jwt', { session: false }), (req, 
 });
 
 // to add passengers
-router.post('/passenger/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.post('/:id/passenger/:uid', passport.authenticate('jwt', { session: false }), (req, res) => {
     Journey.findById(req.params.id).populate('messages').populate('driverUid').populate('passengerUids').exec()
     .then(journey => {
-        User.findById(req.body.uid) // need to edit this so that it pulls user ID from the user who sent the message
+        User.findById(req.params.uid) // need to edit this so that it pulls user ID from the user who sent the message
         .then(user => {
             journey.passengerUids.push(user);
             journey.save();
