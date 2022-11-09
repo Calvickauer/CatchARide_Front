@@ -185,25 +185,27 @@ router.delete('/:id/passengers/remove', passport.authenticate('jwt', { session: 
         res.send(journey);
     })
     .catch(error => {
-                console.log('error', error)
-                res.json({ message: "Error ocurred, passenger not deleted" })
-            })
+        console.log('error', error)
+        res.json({ message: "Error ocurred, passenger not deleted" })
+    });
 });
 
 
 // DELETE route for passenger to remove themselves
-router.delete('/passengers/leave', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Journey.findById(req.body.id)
+router.delete('/:id/passengers/leave', passport.authenticate('jwt', { session: false }), (req, res) => {
+    Journey.findById(req.params.id)
     .then(journey => {
-        let target = indexOf(req.user.id);
+        let array = journey.passengerUids;
+        let target = array.indexOf(req.user.id);
         if (target > -1) {
-            journey.splice(target, 1);
+            array.splice(target, 1);
         }
-        return journey;
-        res.redirect('/return');
-
+        res.send(journey);
     })
-
+    .catch(error => {
+        console.log('error', error)
+        res.json({ message: "Error ocurred, passenger not deleted" })
+    });
 });
 
 // Exports
