@@ -50,7 +50,7 @@ router.get('/return', (req, res) => {
 // GET route display one journey
 router.get('/show/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
     console.log('testing GET id route');
-    Journey.findById(req.params.id).populate('messages').populate('driverUid').populate('passengerUid').exec()
+    Journey.findById(req.params.id).populate('messages').populate('driverUid').populate('passengerUids').exec()
     .then(journey => {
         console.log(journey);
         res.json({journey: journey});
@@ -174,11 +174,11 @@ router.delete('/:id', passport.authenticate('jwt', { session: false }), (req, re
 });
 
 // DELETE route to remove one passenger
-router.delete('/:id/passengers/remove', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.delete('/:id/passengers/:pId/remove', passport.authenticate('jwt', { session: false }), (req, res) => {
     Journey.findById(req.params.id)
     .then(journey => {
         let array = journey.passengerUids;
-        let target = array.indexOf(req.body.pId);
+        let target = array.indexOf(req.params.pId);
         if (target > -1) {
             array.splice(target, 1);
         };
