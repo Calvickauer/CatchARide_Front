@@ -88,24 +88,24 @@ router.post('/:id/new', passport.authenticate('jwt', { session: false }), async 
     User.findById(req.user.id)
         .then(user => {
             Journey.findById(req.params.id)
-            .then(journey => {
-                Message.create({
-                    title: req.body.title,
-                    content: req.body.content
-                }).then(message => {
-                    message.user.push(user);
-                    message.journey.push(journey);
-                    journey.messages.push(message);
-                    user.messages.push(message);
-                    message.save();
-                    user.save();
-                    journey.save();
-                    res.send(message);
+                .then(journey => {
+                    Message.create({
+                        title: req.body.title,
+                        content: req.body.content
+                    }).then(message => {
+                        message.user.push(user);
+                        message.journey.push(journey);
+                        journey.messages.push(message);
+                        user.messages.push(message);
+                        message.save();
+                        user.save();
+                        journey.save();
+                        res.send(message);
+                    })
                 })
-            })
-            .catch(err => {
-                console.log(err);
-            });
+                .catch(err => {
+                    console.log(err);
+                });
         }).catch(err => {
             console.log(err);
         });
@@ -126,7 +126,7 @@ router.put('/edit/:id', (req, res) => {
             })
                 .then(post => {
                     console.log('Post was updated', post);
-                    res.redirect(`/messages`);
+                    res.send(post);
                 })
                 .catch(error => {
                     console.log('error', error)
@@ -153,13 +153,13 @@ router.delete('/delete/:id', (req, res) => {
 
 // show all messages sent to user
 router.get('/inbox', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Journey.find({ driverUid: req.user.id, messages: {$ne: []} }).populate('messages').populate('user').exec()
-    .then(journeys => {
-        res.send(journeys);
-    })
-    .catch(error => {
-        console.log(error)
-    });
+    Journey.find({ driverUid: req.user.id, messages: { $ne: [] } }).populate('messages').populate('user').exec()
+        .then(journeys => {
+            res.send(journeys);
+        })
+        .catch(error => {
+            console.log(error)
+        });
 });
 
 // router.get('/inbox', passport.authenticate('jwt', { session: false }), (req, res) => {

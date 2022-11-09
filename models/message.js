@@ -3,9 +3,8 @@ const { Schema } = mongoose;
 
 const messageSchema = new Schema({
     title: {
-        title: String
+        type: String
     },
-
     content: {
         type: String,
         required: true
@@ -22,8 +21,6 @@ const messageSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Journey'
     }]
-    
-   
 })
 
 const Message = mongoose.model('Message', messageSchema);
