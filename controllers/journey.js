@@ -35,7 +35,7 @@ router.get('/all', (req, res) => {
     Journey.find({}).populate('driverUid')
         .then(journeys => {
             console.log('All journeys', journeys);
-            res.json({journeys: journeys});
+            res.json(journeys);
         })
         .catch(error => {
             console.log(error)
