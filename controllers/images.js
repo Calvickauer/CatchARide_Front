@@ -59,7 +59,7 @@ router.post('/new', upload.single('file'), passport.authenticate('jwt', { sessio
 })
 
 
-router.get('/show/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.get('/show/:id',  async (req, res) => {
     Images.findById(req.params.id)
     .then(img => {
         res.send({ image: img.profileImg });
