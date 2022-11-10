@@ -107,5 +107,22 @@ router.delete('/delete/:id', (req, res) => {
     });
 });
 
+router.delete('/:vId/remove', passport.authenticate('jwt', { session: false }), (req, res) => {
+    User.findById(req.user.id)
+    .then(user => {
+        let array = user.vehicle;
+        let target = array.indexOf(req.params.vId);
+        if (target > -1) {
+            array.splice(target, 1);
+        };
+        user.save();
+        res.send(user);
+    })
+    .catch(error => {
+        console.log('error', error)
+        res.json({ message: "Error ocurred, passenger not deleted" })
+    });
+});
+
 
 module.exports = router;
