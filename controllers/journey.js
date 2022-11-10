@@ -13,17 +13,17 @@ const Journey = require('../models/journey');
 // Controllers
 
 
-// // GET route display all journeys
-// router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
-//     Journey.find({driverUid: req.user.id})
-//         .then(journeys => {
-//             console.log('All journeys', journeys);
-//             res.json({journeys: journeys});
-//         })
-//         .catch(error => {
-//             console.log(error)
-//         });
-// });
+// GET route display all journeys for one user
+router.get('/mine', passport.authenticate('jwt', { session: false }), (req, res) => {
+    Journey.find({driverUid: req.user.id})
+        .then(journeys => {
+            console.log('All journeys', journeys);
+            res.json(journeys);
+        })
+        .catch(error => {
+            console.log(error)
+        });
+});
 
 // router.get('/', (req, res) => {
 //     res.json({ message: 'Journeys endpoint OK! ✅' });
